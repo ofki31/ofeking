@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>ניהול משתמשים - Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📋 לוח ניהול משתמשים</h1>
+
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>שם</th>
+          <th>אימייל</th>
+          <th>סה"כ פעולות</th>
+          <th>הרשמה</th>
+          <th>פעולה</th> <!-- 🆕 -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="4">טוען...</td></tr>
+      </tbody>
+    </table>
+
+    <a href="home.html" class="back-btn">חזרה לעמוד הבית</a>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 2rem;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  
+  th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #42a5f5;
+    color: white;
+  }
+  
+  .back-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    text-decoration: none;
+    background: #42a5f5;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+
+
+
+
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user || !user.isAdmin) {
+  alert("אין לך הרשאה לגשת לעמוד זה.");
+  window.location.href = "login.html";
+}
+
+fetch("http://localhost:3000/admin/users-data")
+  .then(res => res.json())
+  .then(data => {
+    const tbody = document.querySelector("#userTable tbody");
+    tbody.innerHTML = "";
+
+    if (data.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='5'>אין משתמשים להצגה</td></tr>";
+      return;
+    }
+
+    data.forEach(user => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.totalTransactions}</td>
+        <td>${new Date(user.createdAt).toLocaleDateString('he-IL')}</td>
+        <td>
+          <button class="make-admin-btn" data-email="${user.email}">
+            הפוך לאדמין
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // 🎯 מאזינים לכל הכפתורים החדשים
+    document.querySelectorAll(".make-admin-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const email = btn.dataset.email;
+        const confirmAction = confirm(`אתה בטוח שברצונך להפוך את ${email} לאדמין?`);
+        if (!confirmAction) return;
+
+        try {
+          const res = await fetch("http://localhost:3000/admin/make-admin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+          });
+
+          const result = await res.json();
+          if (res.ok) {
+            alert(result.message);
+            location.reload();
+          } else {
+            alert("שגיאה: " + result.message);
+          }
+        } catch (err) {
+          console.error("שגיאה בעדכון:", err);
+          alert("שגיאה במהלך הפיכת המשתמש לאדמין");
+        }
+      });
+    });
+  })
+  .catch(err => {
+    console.error("שגיאה בטעינת המשתמשים", err);
+  });
+
+
+

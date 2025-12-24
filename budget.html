@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>מרכז התקציב החכם</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="budget.css" />
+  </head>
+  <body>
+    <div class="budget-app">
+      <header class="budget-header">
+        <div>
+          <p class="eyebrow">שליטה מלאה בתקציב שלך</p>
+          <h1>מרכז התקציב החכם</h1>
+          <p class="subtitle">
+            בנה יעדים, עקוב אחר הרגלים וקבל המלצה חכמה המבוססת על ההיסטוריה הפיננסית שלך
+          </p>
+        </div>
+        <div class="header-actions">
+          <a href="home.html" class="ghost-btn">
+            <i class="fas fa-arrow-right"></i>
+            חזרה לדף הבית
+          </a>
+          <button id="refresh-summary" class="btn secondary">
+            <i class="fas fa-sync-alt"></i>
+            רענן תקציב
+          </button>
+        </div>
+      </header>
+
+      <section class="summary-grid" id="summary-cards">
+        <article class="summary-card primary">
+          <div class="card-icon">
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <p class="label">תקציב כולל מומלץ</p>
+          <p class="value" id="metric-budget">₪0</p>
+          <p class="helper">סה"כ כל הקטגוריות</p>
+        </article>
+        <article class="summary-card">
+          <div class="card-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <p class="label">הכנסה צפויה</p>
+          <p class="value" id="metric-income">₪0</p>
+          <p class="helper muted">ממוצע חודשי</p>
+        </article>
+        <article class="summary-card">
+          <div class="card-icon">
+            <i class="fas fa-receipt"></i>
+          </div>
+          <p class="label">הוצאה צפויה</p>
+          <p class="value" id="metric-expense">₪0</p>
+          <p class="helper muted">סה"כ תקציבים</p>
+        </article>
+        <article class="summary-card success">
+          <div class="card-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <p class="label">חיסכון מוערך</p>
+          <p class="value" id="metric-savings">₪0</p>
+          <p class="helper">בהתאם לציפיות</p>
+        </article>
+      </section>
+
+      <section class="card category-budgets-card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">תקציב לפי קטגוריה</p>
+            <h2>תקציב מומלץ לכל קטגוריה</h2>
+            <p class="card-subtitle">מבוסס על ההוצאות ההיסטוריות שלך, היעדים וההרגלים</p>
+          </div>
+        </div>
+        <div id="category-budgets-container">
+          <div class="empty-state">
+            <p><i class="fas fa-info-circle"></i> טוען נתונים...</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout-grid">
+        <article class="card goals-card">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">שלב 1</p>
+              <h2>יעדי הוצאה לפי קטגוריה</h2>
+              <p class="card-subtitle">איזו גישה תרצה לנקוט בכל תחום?</p>
+            </div>
+          </div>
+          <form id="goal-form" class="form-grid">
+            <div class="form-group">
+              <label for="goal-category">קטגוריה</label>
+              <input id="goal-category" type="text" placeholder="אוכל, דלק, בילויים..." list="categories" required />
+              <datalist id="categories">
+                <option value="אוכל"></option>
+                <option value="תחבורה"></option>
+                <option value="בילויים"></option>
+                <option value="חשבונות"></option>
+                <option value="קניות"></option>
+                <option value="משכורת"></option>
+                <option value="חיסכון"></option>
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label for="goal-type">גישה</label>
+              <select id="goal-type" required>
+                <option value="less">להוציא פחות</option>
+                <option value="normal">לשמור על הקיים</option>
+                <option value="more">להשקיע יותר</option>
+              </select>
+            </div>
+            <div class="form-group align-end">
+              <button class="btn primary" type="submit">
+                <i class="fas fa-plus"></i>
+                הוסף יעד
+              </button>
+            </div>
+          </form>
+          <div id="goals-list" class="chips-list empty-state">
+            <p>
+              <i class="fas fa-info-circle"></i>
+              עוד לא הוגדרו יעדים. הוסף יעד ראשון כדי לקבל התאמות חכמות בתקציב.
+            </p>
+          </div>
+        </article>
+
+        <article class="card habits-card">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">שלב 2</p>
+              <h2>הרגלים קבועים</h2>
+              <p class="card-subtitle">מעקב אחרי הוצאות שחוזרות על עצמן</p>
+            </div>
+            <div class="habit-stats">
+              <span>
+                <strong id="habit-total">₪0</strong>
+                עלות חודשית
+              </span>
+              <span>
+                <strong id="habit-count">0</strong>
+                הרגלים פעילים
+              </span>
+            </div>
+          </div>
+          <form id="habit-form" class="form-grid">
+            <div class="form-group">
+              <label for="habit-desc">תיאור ההרגל</label>
+              <input id="habit-desc" type="text" placeholder="קפה יומי, מנוי לחדר כושר..." required />
+            </div>
+            <div class="form-group">
+              <label for="habit-amount">סכום</label>
+              <input id="habit-amount" type="number" min="1" step="0.5" placeholder="₪" required />
+            </div>
+            <div class="form-group">
+              <label for="habit-frequency">תדירות</label>
+              <select id="habit-frequency" required>
+                <option value="daily">יומי</option>
+                <option value="weekly">שבועי</option>
+                <option value="monthly" selected>חודשי</option>
+              </select>
+            </div>
+            <div class="form-group align-end">
+              <button class="btn primary" type="submit">
+                <i class="fas fa-plus"></i>
+                הוסף הרגל
+              </button>
+            </div>
+          </form>
+          <div id="habits-list" class="chips-list empty-state">
+            <p>
+              <i class="fas fa-info-circle"></i>
+              הוסף הרגלים כדי להבין כמה נשאר בתקציב לאחר ההתחייבויות הקבועות.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section class="card insights-card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">שלב 3</p>
+            <h2>תובנות והמלצות</h2>
+            <p class="card-subtitle">נעדכן את ההמלצות מיד לאחר שמירת ההעדפות</p>
+          </div>
+        </div>
+        <ul id="insights-list" class="insights-list">
+          <li class="insight-row muted">עוד לא חושבו תובנות. שמור העדפות לקבלת ניתוח אישי.</li>
+        </ul>
+      </section>
+
+      <section class="card actions-card">
+        <div class="actions-content">
+          <div>
+            <h2>שמור והפעל את הקסם</h2>
+            <p>נעדכן את התקציב החכם לפי היעדים וההרגלים שהגדרת ונתאים לביצועים האמיתיים שלך.</p>
+          </div>
+          <div class="actions-buttons">
+            <button id="save-preferences" class="btn primary">
+              <i class="fas fa-save"></i>
+              שמירת העדפות
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="budget.js"></script>
+  </body>
+</html>

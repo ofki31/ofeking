@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ניהול הוצאות - עמוד הבית</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="icon" type="image/png" href="logo.png" />
+
+</head>
+<body>
+
+  <div class="container">
+    <h1>ברוך הבא 👋</h1>
+
+    <div class="stats">
+      <h2>סטטיסטיקות חודשיות</h2>
+      <p id="total-expense">סה"כ הוצאות החודש: ...</p>
+      <p id="most-common">הקטגוריה הנפוצה: ...</p>
+      <p id="daily-average">ממוצע ליום: ...</p>
+      <p id="monthly-savings">סך החיסכון החודש: ...</p>
+
+    </div>
+
+    <div class="chart-container">
+        <h3>התפלגות לפי קטגוריה</h3>
+        <canvas id="categoryChart"></canvas>
+    </div>
+            
+
+    <div class="actions">
+      <a href="calendar.html" class="calendar-btn">פתח לוח שנה ➜</a>
+      <a href="stats.html" class="calendar-btn">מעבר לסטטיסטיקות</a>
+
+    </div>
+   </div>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+   <script src="home.js"></script>
+</body>
+</html>
+
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    direction: rtl;
+    padding: 20px 0;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 900px;
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* Typography */
+  h1 {
+    font-size: 3rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  h1:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    border-radius: 2px;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    color: #3498db;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+  }
+  
+  /* Stats Section */
+  .stats {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .stats:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stats p {
+    font-size: 1.2rem;
+    margin: 15px 0;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+  }
+  
+  .stats p:last-child {
+    border-bottom: none;
+  }
+  
+  #total-expense {
+    color: #e74c3c;
+    font-weight: bold;
+  }
+  
+  #most-common {
+    color: #9b59b6;
+  }
+  
+  #daily-average {
+    color: #2ecc71;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    height: 350px;
+    position: relative;
+  }
+  
+  .chart-container:hover {
+    transform: translateY(-5px);
+  }
+  
+  #categoryChart {
+    max-height: 280px;
+    margin: 0 auto;
+  }
+  
+  /* Action Buttons */
+  .actions {
+    margin-top: 40px;
+  }
+  
+  .calendar-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    color: white;
+    padding: 16px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .calendar-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: width 0.3s ease;
+  }
+  
+  .calendar-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.6);
+  }
+  
+  .calendar-btn:hover:before {
+    width: 100%;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      width: 95%;
+      padding: 25px;
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+    
+    h3 {
+      font-size: 1.3rem;
+    }
+    
+    .stats p {
+      font-size: 1.1rem;
+    }
+    
+    .chart-container {
+      height: 300px;
+      padding: 20px;
+    }
+    
+    .calendar-btn {
+      padding: 14px 25px;
+      font-size: 1.1rem;
+    }
+  }
+  
+  /* Dark Mode Support - Can be enabled with a toggle */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #222;
+    }
+    
+    .container {
+      background-color: #333;
+      color: #f5f7fa;
+    }
+    
+    h1, h2, h3 {
+      color: #ecf0f1;
+    }
+    
+    .stats, .chart-container {
+      background-color: #444;
+    }
+    
+    .stats p {
+      border-bottom-color: #555;
+    }
+  }
+  
+  /* Animation for page load */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .container {
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  .stats {
+    animation: fadeInUp 0.6s ease-out 0.2s backwards;
+  }
+  
+  .chart-container {
+    animation: fadeInUp 0.6s ease-out 0.4s backwards;
+  }
+  
+  .actions {
+    animation: fadeInUp 0.6s ease-out 0.6s backwards;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .logo {
+    max-width: 180px;
+    height: auto;
+  }
+  
+
+
+// 📊 דף הבית – סטטיסטיקות חודשיות מהשרת בלבד
+
+const totalEl = document.getElementById("total-expense");
+const mostCommonEl = document.getElementById("most-common");
+const avgEl = document.getElementById("daily-average");
+const savingsEl = document.getElementById("monthly-savings");
+
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) {
+  alert("אין משתמש מחובר. נא להתחבר.");
+  window.location.href = "login.html";
+}
+
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+let allExpenses = [];
+
+// 🟡 טעינת כל ההוצאות/הכנסות של המשתמש
+fetch(`http://localhost:3000/transactions/${user.id}`)
+  .then(res => res.json())
+  .then(data => {
+    allExpenses = data.filter(item => {
+      const dateObj = new Date(item.date);
+      return (
+        dateObj.getMonth() === currentMonth &&
+        dateObj.getFullYear() === currentYear
+      );
+    });
+
+    buildStats(allExpenses);
+  })
+  .catch(err => {
+    console.error("שגיאה בטעינת הנתונים:", err);
+  });
+
+// 🧠 חישוב והצגת נתונים
+function buildStats(expenses) {
+  const total = expenses
+    .filter(item => item.type === "expense")
+    .reduce((sum, item) => sum + Number(item.amount), 0);
+
+  const totalIncome = expenses
+    .filter(item => item.type === "income")
+    .reduce((sum, item) => sum + Number(item.amount), 0);
+
+  const monthlySavings = totalIncome - total;
+
+  const categoryCount = {};
+  expenses
+    .filter(item => item.type === "expense")
+    .forEach(item => {
+      categoryCount[item.category] = (categoryCount[item.category] || 0) + 1;
+    });
+
+  let mostCommonCategory = "אין הוצאות";
+  let maxCount = 0;
+  for (let cat in categoryCount) {
+    if (categoryCount[cat] > maxCount) {
+      mostCommonCategory = cat;
+      maxCount = categoryCount[cat];
+    }
+  }
+
+  const uniqueDates = new Set(
+    expenses.filter(e => e.type === "expense").map(e => e.date)
+  );
+  const dailyAverage =
+    uniqueDates.size > 0 ? (total / uniqueDates.size).toFixed(2) : 0;
+
+  // 👁️‍ עדכון תצוגה
+  if (totalEl) totalEl.textContent = `סה"כ הוצאות החודש: ${total.toLocaleString()} ₪`;
+  if (avgEl) avgEl.textContent = `ממוצע יומי: ${dailyAverage} ₪`;
+  if (mostCommonEl) mostCommonEl.textContent = `הקטגוריה הנפוצה: ${mostCommonCategory}`;
+  if (savingsEl) savingsEl.textContent = `סך החיסכון החודש: ${monthlySavings.toLocaleString()} ₪`;
+
+  if (Object.keys(categoryCount).length > 0) {
+    renderCategoryChart(categoryCount);
+  }
+}
+
+// 🎨 צבעים לקטגוריות מה-localStorage (כמו תמיד)
+function getCategoryColor(category) {
+  let colors = JSON.parse(localStorage.getItem("categoryColors")) || {};
+  return colors[category] || "#ccc";
+}
+
+// 🧁 גרף עוגה לפי קטגוריות
+function renderCategoryChart(categoryCount) {
+  const chartEl = document.getElementById("categoryChart");
+  if (!chartEl) return;
+
+  const ctx = chartEl.getContext("2d");
+
+  const data = {
+    labels: Object.keys(categoryCount),
+    datasets: [
+      {
+        data: Object.values(categoryCount),
+        backgroundColor: Object.keys(categoryCount).map(cat => getCategoryColor(cat)),
+        borderColor: "#fff",
+        borderWidth: 2
+      }
+    ]
+  };
+
+  new Chart(ctx, {
+    type: "pie",
+    data: data,
+    options: {
+      plugins: {
+        legend: {
+          position: "right",
+          labels: {
+            font: { size: 14 }
+          }
+        }
+      }
+    }
+  });
+}

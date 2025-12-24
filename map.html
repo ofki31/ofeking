@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפת ההוצאות שלי</title>
+    <!-- ספריית מפות חינמית -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .map-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px 25px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-header h3 {
+            color: #333;
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #5a5fd7;
+            transform: translateY(-2px);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffa726;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background: #4caf50;
+            animation: none;
+        }
+
+        .status-dot.offline {
+            background: #f44336;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .status-text {
+            color: #666;
+            font-weight: 500;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        .loading-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats h3 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+            border-radius: 15px;
+            border: 1px solid #e3f2fd;
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .no-data-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            #map {
+                height: 450px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ מפת ההוצאות שלי</h1>
+        <p>כל ההוצאות שלך עם מיקום מוצגות על המפה</p>
+    </div>
+
+    <div class="container">
+        <div class="map-container">
+            <div class="map-header">
+                <h3>🗺️ המפה שלך</h3>
+                <div class="map-controls">
+                    <div class="server-status" id="serverStatus">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span class="status-text" id="statusText">בודק שרת...</span>
+                    </div>
+                    <button class="control-btn" onclick="refreshMap()">🔄 רענן</button>
+                    <button class="control-btn" onclick="fitAllMarkers()">📍 הצג הכל</button>
+                </div>
+            </div>
+            <div id="map">
+                <div class="loading-container" id="loadingContainer">
+                    <div class="loading-spinner"></div>
+                    <h3>טוען מפה...</h3>
+                    <p>מתחבר לשרת וטוען נתונים</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h3>📊 סטטיסטיקות מיקום</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalWithLocation">0</div>
+                    <div class="stat-label">הוצאות עם מיקום</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalAmount">₪0</div>
+                    <div class="stat-label">סה"כ סכום</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="uniqueLocations">0</div>
+                    <div class="stat-label">מקומות שונים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="avgExpense">₪0</div>
+                    <div class="stat-label">ממוצע הוצאה</div>
+                </div>
+            </div>
+        </div>
+
+        <a href="home.html" class="back-btn">
+            ← חזרה לעמוד הבית
+        </a>
+    </div>
+
+    <!-- ספריית מפות -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // בדיקה שהספרייה נטענה
+        if (typeof L === 'undefined') {
+            console.error('ספריית Leaflet לא נטענה');
+            document.body.innerHTML = `
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    direction: rtl;
+                ">
+                    <div style="
+                        background: white;
+                        padding: 40px;
+                        border-radius: 20px;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                        text-align: center;
+                        max-width: 400px;
+                    ">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+                        <h2 style="color: #333; margin-bottom: 15px;">שגיאה בטעינת המפה</h2>
+                        <p style="color: #666; margin-bottom: 25px;">ספריית המפות לא נטענה כראוי</p>
+                        <button onclick="location.reload()" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            border: none;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">רענן דף</button>
+                    </div>
+                </div>
+            `;
+        }
+        // משתנים גלובליים
+        let map;
+        let expensesWithLocation = [];
+        let markers = [];
+
+        // בדיקת משתמש מחובר
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.id) {
+            // הצגת הודעה יפה במקום alert
+            document.body.innerHTML = `
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    direction: rtl;
+                ">
+                    <div style="
+                        background: white;
+                        padding: 40px;
+                        border-radius: 20px;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                        text-align: center;
+                        max-width: 400px;
+                    ">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🔐</div>
+                        <h2 style="color: #333; margin-bottom: 15px;">אין משתמש מחובר</h2>
+                        <p style="color: #666; margin-bottom: 25px;">נא להתחבר כדי לצפות במפת ההוצאות</p>
+                        <a href="login.html" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            transition: all 0.3s;
+                        ">התחבר עכשיו</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // יצירת המפה
+        function initMap() {
+            try {
+                const mapContainer = document.getElementById('map');
+                if (!mapContainer) {
+                    throw new Error('אלמנט המפה לא נמצא');
+                }
+                
+                // בדיקה שהספרייה Leaflet נטענה
+                if (typeof L === 'undefined') {
+                    throw new Error('ספריית Leaflet לא נטענה');
+                }
+                
+                // שמירת תוכן קיים לפני ניקוי
+                const existingContent = mapContainer.innerHTML;
+                
+                // ניקוי תוכן קיים
+                mapContainer.innerHTML = '';
+                
+                map = L.map('map').setView([32.0853, 34.7818], 8); // תל אביב כנקודת התחלה
+
+                // הוספת שכבת מפה (OpenStreetMap - חינמי!)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                
+                console.log('המפה נוצרה בהצלחה');
+            } catch (error) {
+                console.error('שגיאה ביצירת המפה:', error);
+                // החזרת התוכן הקיים במקרה של שגיאה
+                const mapContainer = document.getElementById('map');
+                if (mapContainer) {
+                    mapContainer.innerHTML = existingContent || `
+                        <div class="loading-container" id="loadingContainer">
+                            <div class="loading-spinner"></div>
+                            <h3>שגיאה בטעינת המפה</h3>
+                            <p>נא לנסות שוב</p>
+                        </div>
+                    `;
+                }
+                throw error;
+            }
+        }
+
+        // טעינת נתונים מהשרת
+        function loadData() {
+            // בדיקה נוספת למשתמש מחובר
+            const currentUser = JSON.parse(localStorage.getItem("user"));
+            if (!currentUser || !currentUser.id) {
+                showError();
+                return;
+            }
+            
+            showLoading();
+            
+            fetch(`http://localhost:3000/transactions/${currentUser.id}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('כל הנתונים:', data);
+                    
+                    // בדיקה שהנתונים הגיעו בפורמט הנכון
+                    if (!data) {
+                        console.error('נתונים לא תקינים:', data);
+                        hideLoading();
+                        showError();
+                        return;
+                    }
+                    
+                    // בדיקה אם הנתונים הגיעו כ-object עם transactions
+                    let transactions = [];
+                    if (Array.isArray(data)) {
+                        transactions = data;
+                    } else if (data.transactions && Array.isArray(data.transactions)) {
+                        transactions = data.transactions;
+                    } else {
+                        console.error('פורמט נתונים לא מוכר:', data);
+                        hideLoading();
+                        showError();
+                        return;
+                    }
+                    
+                    // סינון רק הוצאות עם מיקום
+                    expensesWithLocation = transactions.filter(item => 
+                        item && 
+                        item.location && 
+                        item.location.latitude && 
+                        item.location.longitude
+                    );
+                    
+                    console.log('הוצאות עם מיקום:', expensesWithLocation);
+                    
+                    hideLoading();
+                    
+                    if (expensesWithLocation.length === 0) {
+                        showNoData();
+                        return;
+                    }
+
+                    // בדיקה שהמפה קיימת לפני הוספת סמנים
+                    if (!map) {
+                        console.error('המפה לא זמינה להוספת סמנים');
+                        showError();
+                        return;
+                    }
+
+                    // הוספת סמנים למפה
+                    addMarkersToMap();
+                    
+                    // חישוב סטטיסטיקות
+                    calculateStats();
+                    
+                    // התאמת המפה לכל הסמנים
+                    fitAllMarkers();
+                })
+                .catch(err => {
+                    console.error('שגיאה בטעינת נתונים:', err);
+                    hideLoading();
+                    showError();
+                });
+        }
+
+        // הצגת טעינה
+        function showLoading() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            if (loadingContainer) {
+                loadingContainer.style.display = 'block';
+            }
+        }
+
+        // הסתרת טעינה
+        function hideLoading() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            if (loadingContainer) {
+                loadingContainer.style.display = 'none';
+            }
+        }
+
+        // הצגת שגיאה
+        function showError() {
+            const mapDiv = document.getElementById('map');
+            if (mapDiv) {
+                mapDiv.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon">⚠️</div>
+                        <h3>שגיאה בטעינת הנתונים</h3>
+                        <p>לא ניתן להתחבר לשרת. נא לבדוק:</p>
+                        <ul style="text-align: right; margin: 15px 0; color: #666;">
+                            <li>שהשרת פועל על פורט 3000</li>
+                            <li>שחיבור האינטרנט פעיל</li>
+                            <li>שאין חסימה של השרת</li>
+                        </ul>
+                        <div style="margin-top: 20px;">
+                            <button class="control-btn" onclick="retryLoad()" style="margin-right: 10px;">🔄 נסה שוב</button>
+                            <button class="control-btn" onclick="checkServerStatus()">🔍 בדוק מצב שרת</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // הצגת הודעה שאין נתונים
+        function showNoData() {
+            const mapDiv = document.getElementById('map');
+            if (mapDiv) {
+                mapDiv.innerHTML = `
+                    <div class="no-data-container">
+                        <div class="no-data-icon">🗺️</div>
+                                             <h3>אין הוצאות עם מיקום עדיין</h3>
+                     <p>כדי לראות הוצאות על המפה, הוסף הוצאות דרך הלוח שנה</p>
+                                             <div style="margin-top: 20px;">
+                         <a href="calendar.html" class="control-btn" style="margin-right: 10px; text-decoration: none;">📅 לוח שנה</a>
+                         <button class="control-btn" onclick="loadData()">🔄 רענן</button>
+                     </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ניסיון חוזר לטעינה
+        function retryLoad() {
+            // בדיקה שהמפה קיימת לפני יצירה חדשה
+            if (map) {
+                map.remove();
+            }
+            initMap();
+            loadData();
+        }
+
+        // רענון המפה
+        function refreshMap() {
+            clearMarkers();
+            loadData();
+        }
+
+        // ניקוי סמנים
+        function clearMarkers() {
+            if (map && markers.length > 0) {
+                markers.forEach(marker => {
+                    if (marker && map.hasLayer(marker)) {
+                        map.removeLayer(marker);
+                    }
+                });
+                markers = [];
+            }
+        }
+
+        // התאמת המפה לכל הסמנים
+        function fitAllMarkers() {
+            if (map && markers.length > 0) {
+                try {
+                    const group = new L.featureGroup(markers);
+                    const bounds = group.getBounds();
+                    if (bounds.isValid()) {
+                        map.fitBounds(bounds.pad(0.1));
+                    }
+                } catch (error) {
+                    console.error('שגיאה בהתאמת המפה:', error);
+                }
+            }
+        }
+
+        // בדיקת מצב השרת
+        function checkServerStatus() {
+            fetch('http://localhost:3000/health')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ השרת פועל כראוי!\n\nזמן הפעלה: ' + Math.round(data.uptime / 60) + ' דקות');
+                        retryLoad();
+                    } else {
+                        alert('❌ השרת לא מגיב כראוי');
+                    }
+                })
+                .catch(err => {
+                    alert('❌ לא ניתן להתחבר לשרת\n\nשגיאה: ' + err.message);
+                });
+        }
+
+        // עדכון מצב השרת
+        function updateServerStatus() {
+            fetch('http://localhost:3000/health')
+                .then(res => res.json())
+                .then(data => {
+                    const statusDot = document.getElementById('statusDot');
+                    const statusText = document.getElementById('statusText');
+                    
+                    if (statusDot && statusText) {
+                        if (data.success) {
+                            statusDot.className = 'status-dot online';
+                            statusText.textContent = 'שרת פעיל';
+                        } else {
+                            statusDot.className = 'status-dot offline';
+                            statusText.textContent = 'שרת לא זמין';
+                        }
+                    }
+                })
+                .catch(err => {
+                    const statusDot = document.getElementById('statusDot');
+                    const statusText = document.getElementById('statusText');
+                    if (statusDot && statusText) {
+                        statusDot.className = 'status-dot offline';
+                        statusText.textContent = 'שרת לא זמין';
+                    }
+                });
+        }
+
+        // הוספת סמנים למפה
+        function addMarkersToMap() {
+            if (!map) {
+                console.error('המפה לא זמינה');
+                return;
+            }
+            
+            expensesWithLocation.forEach(expense => {
+                try {
+                    const lat = parseFloat(expense.location.latitude);
+                    const lng = parseFloat(expense.location.longitude);
+                    
+                    // בדיקה שהקואורדינטות תקינות
+                    if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                        console.warn('קואורדינטות לא תקינות:', expense);
+                        return;
+                    }
+                    
+                    // בחירת צבע לפי סכום
+                    let color = '#3388ff'; // כחול ברירת מחדל
+                    if (expense.amount > 100) color = '#ff6b6b'; // אדום לסכומים גבוהים
+                    else if (expense.amount > 50) color = '#ffa726'; // כתום לסכומים בינוניים
+                    else color = '#4caf50'; // ירוק לסכומים נמוכים
+
+                    // יצירת סמן
+                    const marker = L.circleMarker([lat, lng], {
+                        radius: Math.max(expense.amount / 20, 5), // גודל לפי סכום
+                        fillColor: color,
+                        color: 'white',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+
+                    // הוספת חלון מידע
+                    const popupContent = `
+                        <div style="direction: rtl; text-align: right; min-width: 200px;">
+                            <h4 style="color: #333; margin-bottom: 10px;">${expense.description || 'ללא תיאור'}</h4>
+                            <p style="margin: 5px 0;"><strong>סכום:</strong> <span style="color: #667eea; font-weight: bold;">₪${(expense.amount || 0).toLocaleString()}</span></p>
+                            <p style="margin: 5px 0;"><strong>קטגוריה:</strong> ${expense.category || 'ללא קטגוריה'}</p>
+                            <p style="margin: 5px 0;"><strong>תאריך:</strong> ${new Date(expense.date || Date.now()).toLocaleDateString('he-IL')}</p>
+                            ${expense.location.address ? `<p style="margin: 5px 0;"><strong>כתובת:</strong> ${expense.location.address}</p>` : ''}
+                        </div>
+                    `;
+
+                    marker.bindPopup(popupContent);
+                    marker.addTo(map);
+                    markers.push(marker);
+                } catch (error) {
+                    console.error('שגיאה בהוספת סמן:', error, expense);
+                }
+            });
+        }
+
+        // חישוב סטטיסטיקות
+        function calculateStats() {
+            try {
+                const totalWithLocation = expensesWithLocation.length;
+                const totalExpenses = expensesWithLocation.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+                
+                // מקומות ייחודיים
+                const locations = new Set();
+                expensesWithLocation.forEach(expense => {
+                    if (expense.location && expense.location.address) {
+                        locations.add(expense.location.address);
+                    } else if (expense.location && expense.location.latitude && expense.location.longitude) {
+                        locations.add(`${expense.location.latitude},${expense.location.longitude}`);
+                    }
+                });
+
+                const avgExpense = totalWithLocation > 0 ? totalExpenses / totalWithLocation : 0;
+
+                // עדכון התצוגה
+                const totalWithLocationEl = document.getElementById('totalWithLocation');
+                const totalAmountEl = document.getElementById('totalAmount');
+                const uniqueLocationsEl = document.getElementById('uniqueLocations');
+                const avgExpenseEl = document.getElementById('avgExpense');
+                
+                if (totalWithLocationEl) totalWithLocationEl.textContent = totalWithLocation;
+                if (totalAmountEl) totalAmountEl.textContent = `₪${totalExpenses.toLocaleString()}`;
+                if (uniqueLocationsEl) uniqueLocationsEl.textContent = locations.size;
+                if (avgExpenseEl) avgExpenseEl.textContent = `₪${avgExpense.toFixed(0)}`;
+            } catch (error) {
+                console.error('שגיאה בחישוב סטטיסטיקות:', error);
+            }
+        }
+
+        // אתחול המפה וטעינת נתונים
+        try {
+            // המתנה קצרה לוודא שהדף נטען לחלוטין
+            setTimeout(() => {
+                try {
+                    initMap();
+                    updateServerStatus();
+                    loadData();
+                    
+                    // עדכון מצב השרת כל 30 שניות
+                    setInterval(updateServerStatus, 30000);
+                } catch (error) {
+                    console.error('שגיאה באתחול:', error);
+                    showError();
+                }
+            }, 100);
+        } catch (error) {
+            console.error('שגיאה באתחול:', error);
+            showError();
+        }
+    </script>
+</body>
+</html>

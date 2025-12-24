@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אופק - ניהול הוצאות והכנסות בחכמה</title>
+    <link rel="stylesheet" href="first.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navbar = document.querySelector('.navbar');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navbar.parentElement.classList.toggle('mobile-nav-active');
+            });
+        });
+    </script>
+</head>
+<body class="landing-body">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+
+    <header class="hero-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="logo.png" alt="אופק" style="width: 40px; height: 40px; margin-left: 10px;">
+                    <div>
+                        <p class="brand-eyebrow">אופק</p>
+                        <h1>ניהול הוצאות והכנסות</h1>
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="#features">תכונות</a>
+                    <a href="#steps">איך זה עובד</a>
+                    <a href="#stories">חוויות משתמשים</a>
+                </div>
+
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn ghost">התחברות</a>
+                    <a href="register.html" class="btn solid">פתח חשבון</a>
+                </div>
+
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <div class="eyebrow">ניהול כלכלי חכם ופשוט</div>
+                    <h2>מעקב אחר הוצאות והכנסות במקום אחד</h2>
+                    <p>
+                        אופק מאפשר לך לנהל את הכסף שלך בקלות - הוסף תנועות דרך לוח שנה, עקוב אחר התקציב,
+                        צפה בסטטיסטיקות מפורטות וצפה בהוצאות על מפה. הכל בעברית, פשוט ויעיל.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="register.html" class="btn solid large">מתחילים בחינם</a>
+                        <a href="login.html" class="btn ghost large">כבר רשומים?</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div>
+                            <strong>לוח שנה</strong>
+                            <span>הוסף הוצאות והכנסות בקלות</span>
+                        </div>
+                        <div>
+                            <strong>תקציב חכם</strong>
+                            <span>יעדים והרגלים מותאמים אישית</span>
+                        </div>
+                        <div>
+                            <strong>מפה וסטטיסטיקות</strong>
+                            <span>תובנות מפורטות על ההוצאות</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="card main-card">
+                        <p class="card-label">מעקב חודשי</p>
+                        <h3>₪8,500 <span>הוצאות</span></h3>
+                        <div class="progress">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <ul>
+                            <li>
+                                <span>אוכל</span>
+                                <strong>₪2,300</strong>
+                            </li>
+                            <li>
+                                <span>תחבורה</span>
+                                <strong>₪1,200</strong>
+                            </li>
+                            <li>
+                                <span>בילויים</span>
+                                <strong>₪850</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card floating-card savings">
+                        <p>הכנסות</p>
+                        <strong>₪12,000</strong>
+                        <small>משכורת חודשית</small>
+                    </div>
+                    <div class="card floating-card alerts">
+                        <p>מאזן</p>
+                        <strong>₪3,500</strong>
+                        <small>חיסכון החודש</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="section features">
+            <div class="container">
+                <div class="section-intro">
+                    <p class="eyebrow">מה מקבלים</p>
+                    <h3>כל הכלים לניהול הוצאות והכנסות במקום אחד</h3>
+                    <p>לוח שנה נוח, תקציב חכם, מפה אינטראקטיבית וסטטיסטיקות מפורטות - הכל בעברית.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="icon-badge">📅</div>
+                        <h4>לוח שנה אינטראקטיבי</h4>
+                        <p>הוסף הוצאות והכנסות ישירות דרך לוח שנה נוח וידידותי. כל התנועות במקום אחד.</p>
+                        <span class="tag">פשוט ונוח</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="icon-badge">💰</div>
+                        <h4>תקציב חכם</h4>
+                        <p>הגדר יעדים והרגלים, קבל המלצות מותאמות אישית ועקוב אחר התקציב שלך בזמן אמת.</p>
+                        <span class="tag">מותאם אישית</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="icon-badge">🗺️</div>
+                        <h4>מפת הוצאות</h4>
+                        <p>צפה בהוצאות שלך על מפה אינטראקטיבית. זהה דפוסים גיאוגרפיים וקבל תובנות חדשות.</p>
+                        <span class="tag">ויזואליזציה</span>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="icon-badge">📊</div>
+                        <h4>סטטיסטיקות מתקדמות</h4>
+                        <p>גרפים מפורטים, ניתוח מגמות, השוואות תקופתיות ותובנות חכמות על הרגלי ההוצאה שלך.</p>
+                        <span class="tag">תובנות מעמיקות</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="steps" class="section journey">
+            <div class="container journey-grid">
+                <div class="section-intro">
+                    <p class="eyebrow">איך זה עובד</p>
+                    <h3>תוך שלושה צעדים פשוטים תתחיל לנהל את הכסף שלך</h3>
+                    <p>הוסף תנועות, הגדר תקציב וצפה בתובנות - הכל פשוט וברור.</p>
+                </div>
+
+                <div class="steps">
+                    <article>
+                        <span>01</span>
+                        <h4>הוסף תנועות</h4>
+                        <p>פתח את לוח השנה והוסף הוצאות והכנסות בקלות. כל תנועה מתועדת עם קטגוריה ומיקום.</p>
+                    </article>
+                    <article>
+                        <span>02</span>
+                        <h4>הגדר תקציב</h4>
+                        <p>בנה תקציב חכם עם יעדים והרגלים. המערכת תציע המלצות מותאמות אישית.</p>
+                    </article>
+                    <article>
+                        <span>03</span>
+                        <h4>צפה בתובנות</h4>
+                        <p>עקוב אחר הסטטיסטיקות, צפה במפה וקבל תובנות מעמיקות על הרגלי ההוצאה שלך.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="stories" class="section stories">
+            <div class="container stories-grid">
+                <div class="story-card">
+                    <p class="quote">"לוח השנה עושה את כל ההבדל - אני רואה בדיוק מתי הוצאתי וכמה, וזה עוזר לי לשלוט בתקציב."</p>
+                    <div class="person">
+                        <div class="avatar">א</div>
+                        <div>
+                            <strong>אורית, תל אביב</strong>
+                            <small>משפחה צעירה</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <p class="quote">"הסטטיסטיקות והגרפים עוזרים לי להבין לאן הכסף הולך. עכשיו אני יודע בדיוק איפה לחסוך."</p>
+                    <div class="person">
+                        <div class="avatar">ד</div>
+                        <div>
+                            <strong>דניאל, סטודנט</strong>
+                            <small>שומר על איזון</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <p class="quote">"המפה מראה לי איפה אני מוציא הכי הרבה. זה פתח לי את העיניים על הרגלי הקנייה שלי."</p>
+                    <div class="person">
+                        <div class="avatar">מ</div>
+                        <div>
+                            <strong>מאיה, חיפה</strong>
+                            <small>נשואה + 2</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section final-cta">
+            <div class="container final-card">
+                <div>
+                    <p class="eyebrow">בקרוב יותר מאי פעם</p>
+                    <h3>התחלת היום היא החיסכון של מחר</h3>
+                    <p>הצטרפו בחינם, הגדירו יעדים אישיים והתחילו לעקוב אחר ההתקדמות שלכם כבר השבוע.</p>
+                </div>
+                <div class="cta-actions">
+                    <a href="register.html" class="btn solid large">הרשמה מהירה</a>
+                    <a href="login.html" class="btn ghost large">יש לי חשבון</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 אופק • ניהול הוצאות והכנסות בעברית</p>
+        </div>
+    </footer>
+</body>
+</html>

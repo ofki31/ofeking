@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>התחברות למערכת</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body class="auth-body">
+  <div class="background-shapes">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <main class="auth-shell">
+    <section class="info-panel">
+      <div class="brand-badge">
+        <img src="logo.png" alt="אופק" loading="lazy" />
+      </div>
+      <p class="tagline">ניהול כספים אישי פשוט ומדויק</p>
+      <h1>שומרים על איזון בחיים הפרטיים</h1>
+      <p class="description">
+        התחברות מהירה ובטוחה כדי לעקוב אחר הוצאות, חיסכון ויעדים משפחתיים – הכל במקום אחד שמתאים לך.
+      </p>
+
+      <ul class="value-list">
+        <li><i class="fas fa-bolt"></i> תובנות יומיות על הרגלי הוצאות</li>
+        <li><i class="fas fa-piggy-bank"></i> מעקב חיסכון אישי ומשפחתי</li>
+        <li><i class="fas fa-bell"></i> התראות חכמות לפני חריגה מהתקציב</li>
+      </ul>
+
+      <div class="info-footer">
+        <div class="avatar-group">
+          <span class="avatar">AO</span>
+          <span class="avatar">YL</span>
+          <span class="avatar">SR</span>
+        </div>
+        <div>
+          <p class="trust-score">+6,200 משתמשים פרטיים</p>
+          <small>מתאים לסטודנטים, משפחות וצעירים</small>
+        </div>
+      </div>
+
+      <blockquote class="quote-card">
+        "המערכת נותנת לי שקט נפשי – אני יודעת בדיוק כמה נשאר עד סוף החודש."
+        <cite>סיון, אמא לשניים</cite>
+      </blockquote>
+    </section>
+
+    <section class="form-panel">
+      <header class="form-header">
+        <button type="button" class="ghost-btn" onclick="window.location.href='index.html'">
+          <i class="fas fa-arrow-right"></i>
+          חזרה לדף הבית
+        </button>
+        <a href="register.html" class="header-link">עדיין בלי חשבון?</a>
+      </header>
+
+      <div class="form-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">שלום שוב 👋</p>
+            <h2>התחברות לחשבון</h2>
+            <p class="subtitle">מלא את הפרטים כדי לפתוח את לוח הבקרה שלך</p>
+          </div>
+          <span class="status-pill">
+            <i class="fas fa-circle"></i>
+            מאובטח
+          </span>
+        </div>
+
+        <div class="form-alert hidden" id="formAlert" role="status" aria-live="polite"></div>
+
+        <form id="loginForm" novalidate>
+          <div class="input-wrapper">
+            <label for="email">אימייל</label>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="email"
+                placeholder="name@company.com"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <small class="field-error" id="emailError"></small>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="password">סיסמה</label>
+            <div class="input-field password">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+                minlength="6"
+              />
+              <button type="button" id="togglePassword" class="eye-button" aria-label="הצג סיסמה">
+                <i class="far fa-eye"></i>
+              </button>
+            </div>
+            <small class="field-error" id="passwordError"></small>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox">
+              <input type="checkbox" id="remember" />
+              <span>זכור אותי במכשיר זה</span>
+            </label>
+            <button type="button" class="link-btn" id="resetLink">שכחתי סיסמה</button>
+          </div>
+
+          <div class="submit-area">
+            <button type="submit" class="submit-btn" id="loginSubmit">
+              <span>התחבר</span>
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <p class="switch-text">
+              חדש במערכת?
+              <a href="register.html">פתיחת חשבון</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>

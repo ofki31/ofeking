@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>הרשמה</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h2>יצירת חשבון חדש 👤</h2>
+    <form id="registerForm">
+      <label for="name">שם מלא:</label>
+      <input type="text" id="name" required />
+
+      <label for="email">אימייל:</label>
+      <input type="email" id="email" required />
+
+      <label for="password">סיסמה:</label>
+      <input type="password" id="password" required minlength="6" />
+
+      <button type="submit">הרשם</button>
+    </form>
+
+    <p>כבר יש לך חשבון? <a href="login.html">התחבר כאן</a></p>
+  </div>
+
+  <script src="register.js"></script>
+</body>
+</html>
+
+
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+  
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+  
+    const response = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
+  
+    const data = await response.json();
+    if (response.ok) {
+      alert("נרשמת בהצלחה! עבור להתחברות.");
+      window.location.href = "login.html";
+    } else {
+      alert("שגיאה: " + data.message);
+    }
+  });
+  

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 סטטיסטיקות מתקדמות - ניהול הוצאות</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap&subset=hebrew" rel="stylesheet">
+  <link rel="stylesheet" href="stats.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // וידוא שהספריות נטענו
+    window.addEventListener('load', function() {
+      if (typeof html2pdf === 'undefined') {
+        console.error('❌ html2pdf לא נטענה כראוי');
+      } else {
+        console.log('✅ html2pdf נטענה בהצלחה');
+      }
+      
+      if (typeof window.jspdf === 'undefined') {
+        console.error('❌ jsPDF לא נטענה כראוי');
+      } else {
+        console.log('✅ jsPDF נטענה בהצלחה');
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="page-header">
+      <div class="header-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+      
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo">
+      </div>
+      
+      <h1 class="main-title">
+        <i class="fas fa-chart-line"></i>
+        סטטיסטיקות מתקדמות
+        <span class="wave">📊</span>
+      </h1>
+      
+      <p class="subheading">ניתוח מעמיק של ההוצאות וההכנסות שלך עם תובנות חכמות</p>
+      
+      <div class="header-stats">
+        <div class="stat-badge">
+          <i class="fas fa-calendar-alt"></i>
+          <span id="current-period">החודש הנוכחי</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fas fa-database"></i>
+          <span id="total-transactions">טוען...</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fas fa-chart-pie"></i>
+          <span id="active-categories">טוען...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="actions-bar">
+      <div class="filter-controls">
+        <select id="periodFilter" class="filter-select">
+          <option value="current">החודש הנוכחי</option>
+          <option value="last3">3 חודשים אחרונים</option>
+          <option value="last6">6 חודשים אחרונים</option>
+          <option value="year">השנה הנוכחית</option>
+        </select>
+        
+        <button id="refreshBtn" class="action-btn refresh-btn">
+          <i class="fas fa-sync-alt"></i>
+          <span>רענן נתונים</span>
+        </button>
+      </div>
+      
+      <div class="export-controls">
+        <button id="downloadPdfBtn" class="action-btn download-btn">
+          <i class="fas fa-file-pdf"></i>
+          <span>הורד PDF</span>
+        </button>
+        <button id="emailSummaryBtn" class="action-btn email-btn">
+          <i class="fas fa-envelope"></i>
+          <span>שלח למייל</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+      <!-- Key Metrics Section -->
+      <div class="metrics-section">
+        <h2 class="section-title">
+          <i class="fas fa-tachometer-alt"></i>
+          מדדים מרכזיים
+        </h2>
+        
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div class="metric-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="metric-content">
+              <h3>סה"כ הוצאות</h3>
+              <p id="total-expenses">₪0</p>
+              <small id="expenses-trend" class="trend positive">+0%</small>
+            </div>
+          </div>
+          
+          <div class="metric-card success">
+            <div class="metric-icon">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="metric-content">
+              <h3>סה"כ הכנסות</h3>
+              <p id="total-incomes">₪0</p>
+              <small id="incomes-trend" class="trend positive">+0%</small>
+            </div>
+          </div>
+          
+          <div class="metric-card warning">
+            <div class="metric-icon">
+              <i class="fas fa-piggy-bank"></i>
+            </div>
+            <div class="metric-content">
+              <h3>חיסכון</h3>
+              <p id="total-savings">₪0</p>
+              <small id="savings-trend" class="trend positive">+0%</small>
+            </div>
+          </div>
+          
+          <div class="metric-card info">
+            <div class="metric-icon">
+              <i class="fas fa-percentage"></i>
+            </div>
+            <div class="metric-content">
+              <h3>אחוז חיסכון</h3>
+              <p id="savings-rate">0%</p>
+              <small id="rate-trend" class="trend positive">+0%</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-section">
+        <div class="chart-controls">
+          <h2 class="section-title">
+            <i class="fas fa-chart-bar"></i>
+            גרפים וניתוחים
+          </h2>
+          
+          <div class="chart-tabs">
+            <button class="tab-btn active" data-chart="monthly">
+              <i class="fas fa-calendar"></i>
+              <span>הוצאות חודשיות</span>
+            </button>
+            <button class="tab-btn" data-chart="categories">
+              <i class="fas fa-tags"></i>
+              <span>קטגוריות</span>
+            </button>
+            <button class="tab-btn" data-chart="trends">
+              <i class="fas fa-chart-line"></i>
+              <span>מגמות</span>
+            </button>
+            <button class="tab-btn" data-chart="comparison">
+              <i class="fas fa-balance-scale"></i>
+              <span>השוואות</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="charts-container">
+          <div class="chart-wrapper active" id="monthly-chart">
+            <div class="chart-header">
+              <h3>הוצאות והכנסות לפי חודש</h3>
+              <div class="chart-actions">
+                <button class="chart-btn" data-action="zoom">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="chart-btn" data-action="download">
+                  <i class="fas fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-wrapper" id="categories-chart">
+            <div class="chart-header">
+              <h3>התפלגות לפי קטגוריות</h3>
+              <div class="chart-actions">
+                <button class="chart-btn" data-action="zoom">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="chart-btn" data-action="download">
+                  <i class="fas fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="categoriesChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-wrapper" id="trends-chart">
+            <div class="chart-header">
+              <h3>מגמות לאורך זמן</h3>
+              <div class="chart-actions">
+                <button class="chart-btn" data-action="zoom">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="chart-btn" data-action="download">
+                  <i class="fas fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="trendsChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-wrapper" id="comparison-chart">
+            <div class="chart-header">
+              <h3>השוואה בין תקופות</h3>
+              <div class="chart-actions">
+                <button class="chart-btn" data-action="zoom">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="chart-btn" data-action="download">
+                  <i class="fas fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="comparisonChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights Section -->
+      <div class="insights-section">
+        <h2 class="section-title">
+          <i class="fas fa-lightbulb"></i>
+          תובנות חכמות
+        </h2>
+        
+        <div class="insights-grid">
+          <div class="insight-card">
+            <div class="insight-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <div class="insight-content">
+              <h4>הוצאה גבוהה ביותר</h4>
+              <p id="highest-expense">טוען...</p>
+            </div>
+          </div>
+          
+          <div class="insight-card">
+            <div class="insight-icon">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="insight-content">
+              <h4>יום יקר ביותר</h4>
+              <p id="expensive-day">טוען...</p>
+            </div>
+          </div>
+          
+          <div class="insight-card">
+            <div class="insight-icon">
+              <i class="fas fa-tags"></i>
+            </div>
+            <div class="insight-content">
+              <h4>קטגוריה נפוצה</h4>
+              <p id="common-category">טוען...</p>
+            </div>
+          </div>
+          
+          <div class="insight-card">
+            <div class="insight-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="insight-content">
+              <h4>מגמה כללית</h4>
+              <p id="general-trend">טוען...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis -->
+      <div class="analysis-section">
+        <h2 class="section-title">
+          <i class="fas fa-microscope"></i>
+          ניתוח מפורט
+        </h2>
+        
+        <div class="analysis-grid">
+          <div class="analysis-card">
+            <h3>סטטיסטיקות יומיות</h3>
+            <div class="analysis-content" id="daily-stats">
+              <p>טוען נתונים...</p>
+            </div>
+          </div>
+          
+          <div class="analysis-card">
+            <h3>השוואה שבועית</h3>
+            <div class="analysis-content" id="weekly-stats">
+              <p>טוען נתונים...</p>
+            </div>
+          </div>
+          
+          <div class="analysis-card">
+            <h3>יעילות כלכלית</h3>
+            <div class="analysis-content" id="efficiency-stats">
+              <p>טוען נתונים...</p>
+            </div>
+          </div>
+          
+          <div class="analysis-card">
+            <h3>תחזיות</h3>
+            <div class="analysis-content" id="predictions">
+              <p>טוען נתונים...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <div class="footer-content">
+        <a href="home.html" class="back-btn">
+          <i class="fas fa-home"></i>
+          <span>חזרה לעמוד הבית</span>
+        </a>
+        
+        <div class="footer-info">
+          <p>&copy; 2024 ניהול הוצאות - מערכת סטטיסטיקות מתקדמת</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+      <i class="fas fa-chart-line fa-spin"></i>
+      <p>טוען סטטיסטיקות...</p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="stats.js"></script>
+</body>
+</html>

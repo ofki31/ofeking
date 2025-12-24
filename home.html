@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ניהול הוצאות - עמוד הבית</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap&subset=hebrew" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // וידוא שהספריות נטענו
+    window.addEventListener('load', function() {
+      if (typeof html2pdf === 'undefined') {
+        console.error('❌ html2pdf לא נטענה כראוי');
+      } else {
+        console.log('✅ html2pdf נטענה בהצלחה');
+      }
+      
+      if (typeof window.jspdf === 'undefined') {
+        console.error('❌ jsPDF לא נטענה כראוי');
+      } else {
+        console.log('✅ jsPDF נטענה בהצלחה');
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="home-header">
+      <div class="header-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+      
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo">
+      </div>
+      
+      <h1 class="main-title">
+        <i class="fas fa-home"></i>
+        ברוך הבא
+        <span class="wave">👋</span>
+      </h1>
+      
+      <p class="subtitle">ניהול כלכלי חכם - מעקב אחר הוצאות והכנסות</p>
+      
+      <div class="header-stats">
+        <div class="stat-badge">
+          <i class="fas fa-clock"></i>
+          <span id="current-time">טוען...</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fas fa-calendar-day"></i>
+          <span id="current-date">טוען...</span>
+        </div>
+        <div class="stat-badge" id="connection-status">
+          <i class="fas fa-wifi"></i>
+          <span>בודק חיבור...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-section">
+      <h2 class="section-title">
+        <i class="fas fa-calendar-alt"></i>
+        ניהול תנועות
+      </h2>
+      <p class="section-subtitle" style="text-align: center; color: #666; margin-bottom: 20px; font-size: 1rem;">
+        💡 <strong>טיפ:</strong> כל הוספת הוצאות והכנסות מתבצעת דרך הלוח שנה בלבד
+      </p>
+      
+      <div class="quick-actions-grid">
+        <a href="calendar.html" class="quick-action-card primary">
+          <div class="action-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <div class="action-content">
+            <h3>לוח שנה</h3>
+            <p>הוסף תנועות חדשות דרך הלוח שנה</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fas fa-arrow-left"></i>
+          </div>
+        </a>
+        
+        <button class="quick-action-card accent" onclick="window.open('calendar.html', '_blank')">
+          <div class="action-icon">
+            <i class="fas fa-plus-circle"></i>
+          </div>
+          <div class="action-content">
+            <h3>הוסף תנועה מהירה</h3>
+            <p>פתח לוח שנה בחלון חדש להוספה מהירה</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fas fa-external-link-alt"></i>
+          </div>
+        </button>
+        
+        <a href="budget.html" class="quick-action-card secondary">
+          <div class="action-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="action-content">
+            <h3>תקציב</h3>
+            <p>ניהול תקציב חודשי</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fas fa-arrow-left"></i>
+          </div>
+        </a>
+        
+        <a href="map.html" class="quick-action-card accent">
+          <div class="action-icon">
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <div class="action-content">
+            <h3>מפת הוצאות</h3>
+            <p>צפה בהוצאות על מפה</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fas fa-arrow-left"></i>
+          </div>
+        </a>
+        
+        <a href="stats.html" class="quick-action-card success">
+          <div class="action-icon">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <div class="action-content">
+            <h3>סטטיסטיקות</h3>
+            <p>ניתוח מפורט של ההוצאות</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fas fa-arrow-left"></i>
+          </div>
+        </a>
+        
+
+      </div>
+    </div>
+
+    <!-- Monthly Statistics -->
+    <div class="stats-section">
+      <h2 class="section-title">
+        <i class="fas fa-chart-pie"></i>
+        סטטיסטיקות חודשיות
+      </h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card expense">
+          <div class="stat-icon">
+            <i class="fas fa-money-bill-wave"></i>
+          </div>
+          <div class="stat-content">
+            <h3>סה"כ הוצאות</h3>
+            <p id="total-expense">טוען...</p>
+            <small class="stat-change positive">+12% מהחודש שעבר</small>
+          </div>
+        </div>
+        
+        <div class="stat-card income">
+          <div class="stat-icon">
+            <i class="fas fa-arrow-up"></i>
+          </div>
+          <div class="stat-content">
+            <h3>סה"כ הכנסות</h3>
+            <p id="total-income">טוען...</p>
+            <small class="stat-change positive">+8% מהחודש שעבר</small>
+          </div>
+        </div>
+        
+        <div class="stat-card savings">
+          <div class="stat-icon">
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <div class="stat-content">
+            <h3>חיסכון</h3>
+            <p id="monthly-savings">טוען...</p>
+            <small class="stat-change positive">+15% מהחודש שעבר</small>
+          </div>
+        </div>
+        
+        <div class="stat-card category">
+          <div class="stat-icon">
+            <i class="fas fa-tags"></i>
+          </div>
+          <div class="stat-content">
+            <h3>קטגוריה נפוצה</h3>
+            <p id="most-common">טוען...</p>
+            <small class="stat-change neutral">לפי תדירות</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-section">
+      <h2 class="section-title">
+        <i class="fas fa-chart-donut"></i>
+        התפלגות לפי קטגוריה
+      </h2>
+      
+      <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+        <div class="chart-overlay" id="chart-overlay">
+          <i class="fas fa-chart-pie"></i>
+          <p>טוען נתונים...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="home-footer">
+      <div class="footer-content">
+        <p>&copy; 2024 ניהול הוצאות - מערכת חכמה לניהול כלכלי</p>
+        <div class="footer-links">
+          <a href="#" class="footer-link">תנאי שימוש</a>
+          <a href="#" class="footer-link">מדיניות פרטיות</a>
+          <a href="#" class="footer-link">צור קשר</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>

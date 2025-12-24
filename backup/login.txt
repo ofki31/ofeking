@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>התחברות</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h2>התחברות 🔐</h2>
+    <form id="loginForm">
+      <label for="email">אימייל:</label>
+      <input type="email" id="email" required />
+
+      <label for="password">סיסמה:</label>
+      <input type="password" id="password" required />
+
+      <button type="submit">התחבר</button>
+    </form>
+
+    <p>אין לך חשבון? <a href="register.html">הרשם עכשיו</a></p>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
+
+
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+  
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+  
+    const response = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+  
+    const data = await response.json();
+  
+    if (response.ok) {
+      alert("התחברת בהצלחה!");
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.user.isAdmin) {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "home.html";
+      }
+      
+    } else {
+      alert("שגיאה: " + data.message);
+    }
+  });
+  

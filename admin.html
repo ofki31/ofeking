@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ניהול משתמשים - לוח בקרה</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <i class="fas fa-tachometer-alt"></i>
+        <h2>לוח בקרה</h2>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="home.html" class="nav-link">
+            <span>דף הבית</span>
+            <i class="fas fa-home"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <span>ניהול משתמשים</span>
+            <i class="fas fa-users"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <span>סטטיסטיקות</span>
+            <i class="fas fa-chart-bar"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <span>דוחות</span>
+            <i class="fas fa-file-alt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <span>הגדרות</span>
+            <i class="fas fa-cog"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>ניהול משתמשים</h1>
+        <div class="user-info">
+          <div class="user-details">
+            <p id="currentAdminName">שלום, מנהל</p>
+          </div>
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-icon icon-blue">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="totalUsers">0</h3>
+            <p>סה"כ משתמשים</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-cyan">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="newUsers">0</h3>
+            <p>משתמשים חדשים</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-purple">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="adminUsers">0</h3>
+            <p>מנהלים</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-pink">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="totalTransactions">0</h3>
+            <p>סה"כ פעולות</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Users Table Card -->
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">רשימת משתמשים</h2>
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="חיפוש משתמשים..." />
+            <i class="fas fa-search"></i>
+          </div>
+        </div>
+        
+        <table class="user-table" id="userTable">
+          <thead>
+            <tr>
+              <th>שם משתמש</th>
+              <th>אימייל</th>
+              <th>סטטוס</th>
+              <th>סה"כ פעולות</th>
+              <th>תאריך הרשמה</th>
+              <th>פעולות</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="6">
+                <div class="spinner"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <ul class="pagination" id="pagination">
+          <li class="page-item">
+            <a href="#" class="page-link active">1</a>
+          </li>
+          <li class="page-item">
+            <a href="#" class="page-link">2</a>
+          </li>
+          <li class="page-item">
+            <a href="#" class="page-link">3</a>
+          </li>
+          <li class="page-item">
+            <a href="#" class="page-link">
+              <i class="fas fa-angle-left"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <script src="admin.js"></script>
+</body>
+</html>

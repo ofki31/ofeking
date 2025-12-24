@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הרשמה למערכת</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body class="auth-body">
+  <div class="background-shapes">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <main class="auth-shell">
+    <section class="info-panel gradient">
+      <div class="brand-badge">
+        <img src="logo.png" alt="אופק" loading="lazy" />
+      </div>
+      <p class="tagline">הכסף שלך מקבל סדר חדש</p>
+      <h1>ניהול פיננסי חכם לאנשים פרטיים</h1>
+      <p class="description">
+        הרשמה מהירה שמחברת אותך ליעדי חיסכון, מעקב הוצאות משפחתי ותזכורות שיעזרו לך לשמור על שגרה כלכלית בריאה.
+      </p>
+
+      <div class="onboarding-stats">
+        <div>
+          <strong>92%</strong>
+          <span>מדווחים על שיפור בהרגלי החיסכון</span>
+        </div>
+        <div>
+          <strong>3 דק׳</strong>
+          <span>והחשבון שלך מוכן</span>
+        </div>
+        <div>
+          <strong>4.9/5</strong>
+          <span>שביעות רצון משתמשים פרטיים</span>
+        </div>
+      </div>
+
+      <blockquote class="quote-card light">
+        "התהליך היה פשוט וברור, ועכשיו גם הילדים משתתפים בתכנון החודשי."
+        <cite>טל, עובד הייטק</cite>
+      </blockquote>
+    </section>
+
+    <section class="form-panel">
+      <header class="form-header">
+        <button type="button" class="ghost-btn" onclick="window.location.href='index.html'">
+          <i class="fas fa-arrow-right"></i>
+          חזרה לדף הבית
+        </button>
+        <a href="login.html" class="header-link">כבר רשומים?</a>
+      </header>
+
+      <div class="form-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">נתחיל בהיכרות קצרה ✨</p>
+            <h2>פתיחת חשבון חדש</h2>
+            <p class="subtitle">ספר לנו עליך ונבנה עבורך לוח בקרה מותאם לבית שלך</p>
+          </div>
+          <span class="status-pill">
+            <i class="fas fa-circle"></i>
+            מאובטח
+          </span>
+        </div>
+
+        <div class="form-alert hidden" id="formAlert" role="status" aria-live="polite"></div>
+
+        <form id="registerForm" novalidate>
+          <div class="form-grid">
+            <div class="input-wrapper">
+              <label for="name">שם מלא</label>
+              <div class="input-field">
+                <i class="fas fa-user"></i>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="נועה ישראלי"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <small class="field-error" id="nameError"></small>
+            </div>
+
+            <div class="input-wrapper">
+              <label for="role">סגנון ניהול כספים</label>
+              <div class="input-field">
+                <i class="fas fa-briefcase"></i>
+                <select id="role" required>
+                  <option value="" disabled selected>איך אתה מנהל את הכסף?</option>
+                  <option value="employee">שכיר/ה שמחפש/ת איזון</option>
+                  <option value="self_employed">עצמאי/ת שמנהל/ת הכל לבד</option>
+                  <option value="student">סטודנט/ית בתקציב מוגבל</option>
+                  <option value="family">משפחה צעירה עם יעדים משותפים</option>
+                  <option value="other">אחר</option>
+                </select>
+              </div>
+              <small class="field-error" id="roleError"></small>
+            </div>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="email">אימייל</label>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="email"
+                placeholder="name@company.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+            <small class="field-error" id="emailError"></small>
+          </div>
+
+          <div class="form-grid">
+            <div class="input-wrapper">
+              <label for="password">סיסמה</label>
+              <div class="input-field password">
+                <i class="fas fa-lock"></i>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="לפחות 8 תווים"
+                  autocomplete="new-password"
+                  required
+                />
+                <button type="button" id="togglePassword" class="eye-button" aria-label="הצג סיסמה">
+                  <i class="far fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-meter">
+                  <div class="strength-bar" id="strengthBar"></div>
+                </div>
+                <span class="strength-text" id="strengthText">חוזק סיסמה</span>
+              </div>
+              <small class="field-error" id="passwordError"></small>
+            </div>
+
+            <div class="input-wrapper">
+              <label for="confirmPassword">אימות סיסמה</label>
+              <div class="input-field password">
+                <i class="fas fa-check-circle"></i>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="הקלד שוב"
+                  autocomplete="new-password"
+                  required
+                />
+                <button type="button" id="toggleConfirmPassword" class="eye-button" aria-label="הצג סיסמה">
+                  <i class="far fa-eye"></i>
+                </button>
+              </div>
+              <small class="field-error" id="confirmPasswordError"></small>
+            </div>
+          </div>
+
+          <ul class="password-rules" id="passwordRules">
+            <li data-rule="length">לפחות 8 תווים</li>
+            <li data-rule="case">אות גדולה ואות קטנה</li>
+            <li data-rule="number">ספרה אחת לפחות</li>
+            <li data-rule="symbol">תו מיוחד (!@#$...)</li>
+          </ul>
+
+          <label class="checkbox terms">
+            <input type="checkbox" id="terms" required />
+            <span>
+              אני מאשר/ת את
+              <a href="#">תנאי השימוש</a>
+              ו
+              <a href="#">מדיניות הפרטיות</a>
+            </span>
+          </label>
+
+          <div class="submit-area">
+            <button type="submit" class="submit-btn" id="registerSubmit">
+              <span>יצירת חשבון</span>
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <p class="switch-text">
+              כבר רשומים?
+              <a href="login.html">התחברות</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="register.js"></script>
+</body>
+</html>

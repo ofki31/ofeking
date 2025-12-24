@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח הוצאות - ניהול כלכלי חכם</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="calendar-header">
+      <div class="header-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+      
+      <h1 class="main-title">
+        <i class="fas fa-calendar-alt"></i>
+        לוח הוצאות
+      </h1>
+      
+      <p class="subtitle">ניהול כלכלי חכם - מעקב יומי אחר הוצאות והכנסות</p>
+      
+      <div class="header-stats">
+        <div class="stat-badge">
+          <i class="fas fa-clock"></i>
+          <span id="current-time">טוען...</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fas fa-calendar-day"></i>
+          <span id="current-date">טוען...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Calendar Navigation -->
+    <div class="calendar-navigation">
+      <button id="prev-month" class="nav-btn">
+        <i class="fas fa-chevron-right"></i>
+        <span>חודש קודם</span>
+      </button>
+      
+      <div class="month-display">
+        <h2 id="month-title">מרץ 2025</h2>
+        <div class="month-actions">
+          <button id="today-btn" class="action-btn">
+            <i class="fas fa-home"></i>
+            היום
+          </button>
+          <button id="year-view-btn" class="action-btn">
+            <i class="fas fa-calendar-week"></i>
+            תצוגת שנה
+          </button>
+        </div>
+      </div>
+      
+      <button id="next-month" class="nav-btn">
+        <span>חודש הבא</span>
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-wrapper">
+      <div class="weekdays">
+        <div class="weekday">
+          <i class="fas fa-sun"></i>
+          <span>ראשון</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-moon"></i>
+          <span>שני</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-star"></i>
+          <span>שלישי</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-heart"></i>
+          <span>רביעי</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-gem"></i>
+          <span>חמישי</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-crown"></i>
+          <span>שישי</span>
+        </div>
+        <div class="weekday">
+          <i class="fas fa-star-of-david"></i>
+          <span>שבת</span>
+        </div>
+      </div>
+
+      <div class="calendar" id="calendar"></div>
+    </div>
+
+    <!-- Footer Actions -->
+    <footer class="footer-actions">
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="window.location.href='home.html'">
+          <i class="fas fa-home"></i>
+          עמוד הבית
+        </button>
+        <button class="quick-btn" onclick="addQuickTransaction()">
+          <i class="fas fa-plus-circle"></i>
+          הוסף תנועה מהירה
+        </button>
+        <button class="quick-btn" onclick="window.location.href='stats.html'">
+          <i class="fas fa-chart-bar"></i>
+          סטטיסטיקות
+        </button>
+        <button class="quick-btn" onclick="window.location.href='budget.html'">
+          <i class="fas fa-wallet"></i>
+          תקציב
+        </button>
+      </div>
+      
+      <a href="home.html" class="back-btn">
+        <i class="fas fa-arrow-right"></i>
+        חזרה לדף הראשי
+      </a>
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>

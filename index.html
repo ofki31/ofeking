@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>מעקב הוצאות חודשי</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-decoration">
+                <div class="decoration-circle circle-1"></div>
+                <div class="decoration-circle circle-2"></div>
+                <div class="decoration-circle circle-3"></div>
+            </div>
+            <h1 id="date-title">
+                <i class="fas fa-chart-line"></i>
+                מעקב הוצאות חודשי
+            </h1>
+            <p class="subtitle">נהל את התקציב שלך בקלות ויעילות עם כלים מתקדמים</p>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="current-month">חודש נוכחי</span>
+                </div>
+                <div class="stat-badge">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time">זמן נוכחי</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-plus-circle"></i> הוספת תנועה חדשה</h2>
+                <div class="card-subtitle">הוסף הוצאה או הכנסה חדשה למערכת</div>
+            </div>
+            <form id="expense">
+                <div class="form-group">
+                    <label for="type">
+                        <i class="fas fa-exchange-alt"></i>
+                        סוג תנועה:
+                    </label>
+                    <select id="type">
+                        <option value="expense">💸 הוצאה</option>
+                        <option value="income">💰 הכנסה</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">
+                        <i class="fas fa-edit"></i>
+                        תיאור:
+                    </label>
+                    <input type="text" id="description" required placeholder="למשל: קניות בסופר, משכורת חודשית...">
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">
+                        <i class="fas fa-shekel-sign"></i>
+                        סכום:
+                    </label>
+                    <div class="amount-wrapper">
+                        <input type="number" id="amount" required placeholder="0" min="0" step="0.01">
+                        <span class="currency-symbol">₪</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">
+                        <i class="fas fa-tags"></i>
+                        קטגוריה:
+                    </label>
+                    <div class="category-wrapper">
+                        <input type="text" id="category" list="category-list" placeholder="למשל: אוכל, פנאי, דלק, משכורת...">
+                        <i class="fas fa-tags category-icon"></i>
+                    </div>
+                    <datalist id="category-list">
+                        <option value="אוכל">🍽️ אוכל</option>
+                        <option value="תחבורה">🚗 תחבורה</option>
+                        <option value="פנאי">🎮 פנאי</option>
+                        <option value="קניות">🛒 קניות</option>
+                        <option value="חשבונות">📄 חשבונות</option>
+                        <option value="משכורת">💼 משכורת</option>
+                        <option value="דלק">⛽ דלק</option>
+                        <option value="בריאות">🏥 בריאות</option>
+                        <option value="חינוך">📚 חינוך</option>
+                        <option value="בילויים">🎉 בילויים</option>
+                    </datalist>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        מיקום (אופציונלי):
+                    </label>
+                    
+                    <div class="location-buttons">
+                        <button type="button" id="currentLocationBtn">
+                            <i class="fas fa-crosshairs"></i>
+                            המיקום שלי עכשיו
+                        </button>
+                        <button type="button" id="manualLocationBtn">
+                            <i class="fas fa-edit"></i>
+                            הזן מיקום אחר
+                        </button>
+                        <button type="button" id="clearLocationBtn">
+                            <i class="fas fa-times"></i>
+                            בלי מיקום
+                        </button>
+                    </div>
+
+                    <div class="location-input-container">
+                        <input type="text" id="locationDisplay" placeholder="לא נבחר מיקום" readonly>
+                        <input type="text" id="locationSearch" placeholder="הקלד כתובת או שם מקום..." style="display: none;">
+                    </div>
+                    
+                    <div id="locationSuggestions" style="display: none;"></div>
+                    <small id="locationStatus" style="color: #666; margin-top: 5px; display: block;"></small>
+                </div>
+            
+                <button type="submit" id="submit">
+                    <i class="fas fa-check"></i>
+                    <span>הוסף תנועה</span>
+                    <div class="loading" style="display: none;"></div>
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-list-ul"></i> רשימת תנועות</h2>
+                <div class="card-subtitle">התנועות האחרונות שלך</div>
+            </div>
+            <div class="expense-container">
+                <div class="list-header">
+                    <div class="list-stats">
+                        <span id="total-count">0 תנועות</span>
+                        <span id="last-updated">עודכן עכשיו</span>
+                    </div>
+                    <div class="list-actions">
+                        <button id="refresh-list" class="action-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button id="export-list" class="action-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <ul id="expense-list">
+                    <li class="expense-placeholder">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <div>אין תנועות עדיין</div>
+                        <small>הוסף תנועה ראשונה כדי להתחיל</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card income">
+                <div class="summary-icon">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>הכנסות</h3>
+                    <p id="total-income">₪0</p>
+                    <small class="summary-change positive">+0% מהחודש שעבר</small>
+                </div>
+            </div>
+            
+            <div class="summary-card expense">
+                <div class="summary-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>הוצאות</h3>
+                    <p id="total-expense">₪0</p>
+                    <small class="summary-change negative">+0% מהחודש שעבר</small>
+                </div>
+            </div>
+            
+            <div class="summary-card balance">
+                <div class="summary-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>מאזן</h3>
+                    <p id="total">₪0</p>
+                    <small class="summary-change neutral">מאזן נוכחי</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-lightbulb"></i> תובנות חכמות</h2>
+                    <div class="card-subtitle">המערכת מזהה דפוסים ומציעה המלצות</div>
+                </div>
+                <div class="insights-content">
+                    <div id="insights-list">
+                        <div class="insight-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>הוסף תנועות כדי לקבל תובנות מותאמות אישית</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="warning" class="warning-message"></div>
+
+        <div class="footer-actions">
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-home"></i>
+                חזרה לעמוד הבית
+            </a>
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="window.open('stats.html', '_blank')">
+                    <i class="fas fa-chart-bar"></i>
+                    סטטיסטיקות
+                </button>
+                <button class="quick-btn" onclick="window.open('budget.html', '_blank')">
+                    <i class="fas fa-calculator"></i>
+                    תקציב
+                </button>
+                <button class="quick-btn" onclick="window.open('calendar.html', '_blank')">
+                    <i class="fas fa-calendar"></i>
+                    לוח שנה
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="index.js"></script>
+</body>
+</html>
