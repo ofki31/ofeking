@@ -12,8 +12,18 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const requiredEnvVars = ["MONGODB_URI", "EMAIL_USER", "EMAIL_PASS"];
+const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
+
+if (missingEnvVars.length > 0) {
+  console.error(
+    `❌ Missing required environment variables: ${missingEnvVars.join(", ")}`
+  );
+  process.exit(1);
+}
+
 // 📦 חיבור ל־MongoDB Atlas
-const MONGODB_URI = "mongodb+srv://qrsynthw:Asd123@cluster0.sa3yrfh.mongodb.net/expensesDB?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // From MongoDB Node.js Driver v4 onwards there is no need for useNewUrlParser/useUnifiedTopology
 // so we call mongoose.connect only with the URI itself.
@@ -173,8 +183,8 @@ const BudgetPreference = mongoose.model("BudgetPreference", BudgetPreferenceSche
 const emailTransporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "ofek1284@gmail.com",
-    pass: "kcdg atlw rgir xgkp"
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -182,7 +192,7 @@ const emailTransporter = nodemailer.createTransport({
 async function sendMonthlySummary(to, subject, htmlContent) {
   try {
     const mailOptions = {
-      from: '"אפליקציית הוצאות" <ofek1284@gmail.com>',
+      from: `"אפליקציית הוצאות" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html: htmlContent
